@@ -1,0 +1,75 @@
+---
+layout: default
+---
+<article class="project">
+  <header class="project-header">
+    <p class="breadcrumb"><a href="{{ '/' | relative_url }}">Projects</a></p>
+    <h1 class="project-title">{{ page.title }}</h1>
+    {% if page.subtitle %}<p class="project-subtitle">{{ page.subtitle }}</p>{% endif %}
+  </header>
+
+  {% if page.cover %}
+    <figure class="project-cover">
+      <img src="{{ page.cover | relative_url }}"
+           alt="{{ page.cover_alt | default: page.title }}" decoding="async">
+      {% if page.cover_caption %}<figcaption>{{ page.cover_caption }}</figcaption>{% endif %}
+    </figure>
+  {% endif %}
+
+  {%- include spec-table.html -%}
+
+  {% if content != "" %}<div class="prose project-body">{{ content }}</div>{% endif %}
+
+  {% if page.sheets %}
+    <h2 class="section-label" id="drawings">Drawings</h2>
+    {%- comment -%}
+      Sheets are listed in drawing-set order with their sheet number and scale,
+      the way they appear on a title block — not as an unlabelled image wall.
+    {%- endcomment -%}
+    <ol class="sheets">
+      {% for sheet in page.sheets %}
+        <li class="sheet">
+          <div class="sheet-figure">
+            {% if sheet.image %}
+              <a class="sheet-zoom" href="{{ sheet.image | relative_url }}"
+                 data-lightbox
+                 data-caption="{{ sheet.number }} — {{ sheet.title }}{% if sheet.scale %} (Scale {{ sheet.scale }}){% endif %}">
+                <img src="{{ sheet.image | relative_url }}"
+                     alt="{{ sheet.alt | default: sheet.title }}"
+                     loading="lazy" decoding="async">
+              </a>
+            {% else %}
+              <div class="placeholder" role="img"
+                   aria-label="Sheet {{ sheet.number }}, {{ sheet.title }}: drawing not published">
+                <span class="placeholder-mark">{{ sheet.number }}</span>
+                <span class="placeholder-note">Drawing not published</span>
+              </div>
+            {% endif %}
+          </div>
+          <div class="sheet-block">
+            <p class="sheet-number">{{ sheet.number }}</p>
+            <p class="sheet-title">{{ sheet.title }}</p>
+            {% if sheet.scale %}<p class="sheet-scale num">Scale {{ sheet.scale }}</p>{% endif %}
+            {% if sheet.paper %}<p class="sheet-paper">{{ sheet.paper }}</p>{% endif %}
+          </div>
+        </li>
+      {% endfor %}
+    </ol>
+  {% endif %}
+
+  {%- assign projects = site.projects | sort: "year" | reverse -%}
+  {% if projects.size > 1 %}
+    <nav class="project-nav" aria-label="Other projects">
+      <h2 class="section-label">Other projects</h2>
+      <ul>
+        {% for project in projects %}
+          {% if project.url != page.url %}
+            <li><a href="{{ project.url | relative_url }}">{{ project.title }}</a></li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+    </nav>
+  {% endif %}
+</article>
+
+<script src="{{ '/assets/js/lightbox.js' | relative_url }}" defer></script>

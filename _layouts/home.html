@@ -1,0 +1,55 @@
+---
+layout: default
+---
+<div class="intro">
+  <h1 class="intro-title">{{ page.title | default: site.title }}</h1>
+  {% if page.subtitle or site.tagline %}
+    <p class="intro-subtitle">{{ page.subtitle | default: site.tagline }}</p>
+  {% endif %}
+  {% if content != "" %}<div class="prose intro-body">{{ content }}</div>{% endif %}
+</div>
+
+{%- assign projects = site.projects | sort: "year" | reverse -%}
+
+{% if projects.size > 0 %}
+  <h2 class="section-label" id="projects">Projects</h2>
+  <ul class="project-grid">
+    {% for project in projects %}
+      {%- assign unit = site.units.area | default: "m²" -%}
+      <li class="project-card">
+        <a class="project-card-link" href="{{ project.url | relative_url }}">
+          <div class="project-card-figure">
+            {% if project.cover %}
+              <img src="{{ project.cover | relative_url }}"
+                   alt="{{ project.cover_alt | default: project.title }}"
+                   loading="lazy" decoding="async">
+            {% else %}
+              {%- comment -%}
+                No cover image supplied. Show a labelled placeholder rather than
+                a broken image or a stock photo that misrepresents the project.
+              {%- endcomment -%}
+              <div class="placeholder" role="img"
+                   aria-label="No cover drawing supplied for {{ project.title }}">
+                <span class="placeholder-mark">{{ project.sheet_ref | default: "—" }}</span>
+                <span class="placeholder-note">No cover drawing</span>
+              </div>
+            {% endif %}
+          </div>
+          <div class="project-card-body">
+            <h3 class="project-card-title">{{ project.title }}</h3>
+            <p class="project-card-meta">
+              {% if project.building_type %}{{ project.building_type }}{% endif %}
+              {% if project.location %}<span class="sep">&middot;</span>{{ project.location }}{% endif %}
+              {% if project.year %}<span class="sep">&middot;</span>{{ project.year }}{% endif %}
+            </p>
+            {% if project.gfa %}
+              <p class="project-card-figure-note num">{{ project.gfa }} {{ unit }} GFA</p>
+            {% endif %}
+          </div>
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p class="empty">No projects yet. Add a Markdown file to <code>_projects/</code> to list one.</p>
+{% endif %}

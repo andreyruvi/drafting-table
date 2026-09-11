@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="{{ page.lang | default: site.lang | default: 'en' }}">
+<head>
+  {%- include head.html -%}
+</head>
+<body class="layout-{{ page.layout | default: 'page' }}{% if page.body_class %} {{ page.body_class }}{% endif %}">
+  <a class="skip" href="#main">Skip to content</a>
+  {%- include masthead.html -%}
+  <main id="main" class="shell">
+    {{ content }}
+  </main>
+  {%- include colophon.html -%}
+</body>
+</html>
