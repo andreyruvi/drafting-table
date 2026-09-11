@@ -1,0 +1,113 @@
+// Print styles.
+//
+// A portfolio that a client prints should come out as a readable sheet, not a
+// screenshot of a web page. Navigation, the lightbox and the decorative grid
+// are dropped; the specification table and the sheet title blocks are kept,
+// because those are the part worth holding.
+
+@page {
+  size: A4 portrait;
+  margin: 18mm 16mm;
+}
+
+// A drawing-heavy project prints better landscape. Set `body_class:
+// print-landscape` in that project's front matter to use this page.
+@page landscape {
+  size: A3 landscape;
+  margin: 12mm;
+}
+
+body.print-landscape { page: landscape; }
+
+* { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+body {
+  background: #fff !important;
+  background-image: none !important;
+  color: #000;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 10.5pt;
+  line-height: 1.45;
+}
+
+.skip,
+.nav,
+.project-nav,
+.breadcrumb,
+.lightbox,
+.colophon-meta { display: none !important; }
+
+.shell { max-width: none; padding: 0; }
+main.shell { padding: 0; }
+
+.masthead {
+  border: 0;
+  border-bottom: 0.5pt solid #000;
+  background: none;
+  margin-bottom: 8mm;
+}
+.masthead-inner { padding: 0 0 3mm; }
+.wordmark-name { font-size: 13pt; }
+.wordmark-role { font-family: inherit; font-size: 8pt; letter-spacing: 0.08em; }
+
+h1, h2, h3 { page-break-after: avoid; break-after: avoid; }
+
+.project-title, .page-title, .intro-title { font-size: 19pt; }
+.project-subtitle, .intro-subtitle { font-size: 11pt; color: #333; }
+
+.section-label {
+  font-family: inherit;
+  font-size: 8.5pt;
+  letter-spacing: 0.1em;
+  border-bottom: 0.5pt solid #000;
+  color: #000;
+}
+
+// Specification table: the numbers, laid out to be read off the page.
+.specs {
+  border: 0.5pt solid #000;
+  border-radius: 0;
+  background: none;
+  padding: 4mm 5mm 5mm;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+.specs-heading { font-family: inherit; font-size: 8.5pt; color: #000; }
+.spec-list { grid-template-columns: repeat(3, 1fr); gap: 3mm 6mm; }
+.spec dt { font-size: 7.5pt; color: #444; }
+.spec dd { font-size: 10pt; }
+.num { font-variant-numeric: tabular-nums; }
+
+// One sheet per printed block, never split across a page break.
+.sheets { gap: 6mm; }
+.sheet {
+  border: 0.5pt solid #000;
+  border-radius: 0;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+.sheet-figure { background: none; }
+.sheet-block { border-left: 0.5pt solid #000; padding: 3mm 4mm; }
+.sheet-number { font-family: inherit; font-size: 11pt; font-weight: bold; }
+.sheet-scale, .sheet-paper { font-family: inherit; font-size: 8.5pt; color: #333; }
+
+.project-card, .specs, .sheet, .prose pre, .prose img, .project-cover img {
+  box-shadow: none;
+}
+
+.placeholder {
+  background: none;
+  border: 0.5pt dashed #666;
+  min-height: 24mm;
+}
+
+// Show where a link actually points once the page is on paper.
+.prose a[href^="http"]::after {
+  content: " (" attr(href) ")";
+  font-size: 8pt;
+  color: #444;
+  word-break: break-all;
+}
+
+.colophon { border-top: 0.5pt solid #000; background: none; margin-top: 8mm; }
+.colophon-inner { padding: 2mm 0 0; font-size: 8.5pt; color: #333; }
