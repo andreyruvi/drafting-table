@@ -1,0 +1,72 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build and check output
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Fails the job on any Liquid or Sass error, which is the check that
+      # matters for a theme: every layout has to compile.
+      - name: Build the site
+        uses: actions/jekyll-build-pages@v1
+        with:
+          source: ./
+          destination: ./_site
+
+      - name: Check the expected pages were generated
+        run: |
+          set -e
+          expected="
+          _site/index.html
+          _site/about/index.html
+          _site/assets/css/style.css
+          _site/assets/css/print.css
+          _site/assets/js/lightbox.js
+          _site/projects/riverside-townhouses/index.html
+          _site/projects/hillside-villa/index.html
+          _site/projects/warehouse-conversion/index.html
+          "
+          for f in $expected; do
+            if [ ! -s "$f" ]; then echo "Missing or empty: $f"; exit 1; fi
+            echo "ok  $f"
+          done
+
+      - name: Check the project layout rendered its data
+        run: |
+          set -e
+          page=_site/projects/riverside-townhouses/index.html
+          for needle in "Project data" "Gross floor area" "2180" "A-101" "Site plan" "1:200"; do
+            if ! grep -qF "$needle" "$page"; then
+              echo "Expected to find '$needle' in $page"; exit 1
+            fi
+            echo "ok  found '$needle'"
+          done
+
+      - name: Check accessibility scaffolding is present
+        run: |
+          set -e
+          for needle in "Skip to content" 'id="main"' 'aria-label="Main"'; do
+            if ! grep -qF "$needle" _site/index.html; then
+              echo "Expected to find '$needle' in _site/index.html"; exit 1
+            fi
+            echo "ok  found '$needle'"
+          done
+
+      - name: Check no placeholder image paths leaked into the build
+        run: |
+          set -e
+          if grep -rlF "example.com/image" _site/ 2>/dev/null | grep -q .; then
+            echo "Placeholder image URLs found in the build"; exit 1
+          fi
+          echo "ok  no placeholder image URLs"
