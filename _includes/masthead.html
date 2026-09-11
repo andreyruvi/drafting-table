@@ -1,0 +1,21 @@
+<header class="masthead">
+  <div class="shell masthead-inner">
+    <a class="wordmark" href="{{ '/' | relative_url }}">
+      <span class="wordmark-name">{{ site.studio.name | default: site.title }}</span>
+      {% if site.studio.role %}<span class="wordmark-role">{{ site.studio.role }}</span>{% endif %}
+    </a>
+
+    {% if site.nav %}
+      <nav class="nav" aria-label="Main">
+        <ul>
+          {% for item in site.nav %}
+            {% assign target = item.url | relative_url %}
+            <li>
+              <a href="{{ target }}"{% if page.url == item.url %} aria-current="page"{% endif %}>{{ item.title }}</a>
+            </li>
+          {% endfor %}
+        </ul>
+      </nav>
+    {% endif %}
+  </div>
+</header>

@@ -1,0 +1,42 @@
+{%- comment -%}
+Renders the project specification table. Every row is optional: a project that
+does not declare a field simply does not show that row, so an early-stage
+project and a completed one both read cleanly.
+{%- endcomment -%}
+{%- assign unit = site.units.area | default: "m²" -%}
+{%- assign has_specs = false -%}
+{%- if page.client or page.location or page.year or page.status or page.building_type
+      or page.gfa or page.site_area or page.plot_ratio or page.storeys
+      or page.structure or page.software or page.services -%}
+  {%- assign has_specs = true -%}
+{%- endif -%}
+
+{% if has_specs %}
+<div class="specs">
+  <h2 class="specs-heading" id="project-data">Project data</h2>
+  <dl class="spec-list">
+    {% if page.client %}<div class="spec"><dt>Client</dt><dd>{{ page.client }}</dd></div>{% endif %}
+    {% if page.location %}<div class="spec"><dt>Location</dt><dd>{{ page.location }}</dd></div>{% endif %}
+    {% if page.year %}<div class="spec"><dt>Year</dt><dd>{{ page.year }}</dd></div>{% endif %}
+    {% if page.status %}<div class="spec"><dt>Status</dt><dd>{{ page.status }}</dd></div>{% endif %}
+    {% if page.building_type %}<div class="spec"><dt>Type</dt><dd>{{ page.building_type }}</dd></div>{% endif %}
+    {% if page.site_area %}<div class="spec"><dt>Site area</dt><dd class="num">{{ page.site_area }} {{ unit }}</dd></div>{% endif %}
+    {% if page.gfa %}<div class="spec"><dt>Gross floor area</dt><dd class="num">{{ page.gfa }} {{ unit }}</dd></div>{% endif %}
+    {% if page.plot_ratio %}<div class="spec"><dt>Plot ratio</dt><dd class="num">{{ page.plot_ratio }}</dd></div>{% endif %}
+    {% if page.storeys %}<div class="spec"><dt>Storeys</dt><dd class="num">{{ page.storeys }}</dd></div>{% endif %}
+    {% if page.structure %}<div class="spec"><dt>Structure</dt><dd>{{ page.structure }}</dd></div>{% endif %}
+    {% if page.software %}
+      <div class="spec"><dt>Software</dt><dd>{{ page.software | join: ", " }}</dd></div>
+    {% endif %}
+    {% if page.services %}
+      <div class="spec spec-wide"><dt>Scope</dt>
+        <dd>
+          <ul class="scope">
+            {% for service in page.services %}<li>{{ service }}</li>{% endfor %}
+          </ul>
+        </dd>
+      </div>
+    {% endif %}
+  </dl>
+</div>
+{% endif %}

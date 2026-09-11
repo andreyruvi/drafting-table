@@ -1,0 +1,13 @@
+<footer class="colophon">
+  <div class="shell colophon-inner">
+    <p class="colophon-studio">
+      {{ site.studio.name | default: site.title }}{% if site.studio.location %} &middot; {{ site.studio.location }}{% endif %}
+    </p>
+    <p class="colophon-meta">
+      {% if site.studio.email and site.studio.email != "" %}
+        <a href="mailto:{{ site.studio.email }}">{{ site.studio.email }}</a> &middot;
+      {% endif %}
+      Built with <a href="https://github.com/andreyruvi/drafting-table">drafting-table</a>
+    </p>
+  </div>
+</footer>
