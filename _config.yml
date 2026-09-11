@@ -1,0 +1,61 @@
+# drafting-table — demo site configuration.
+# This repository is both the theme and its own demo site, so no `theme:` key is
+# needed here: Jekyll picks up _layouts, _includes, _sass and assets directly.
+
+title: Drafting Table
+tagline: A Jekyll theme for building designers
+description: >-
+  A portfolio theme for architects, building designers and drafters. Project
+  pages carry the numbers a drawing set actually needs — GFA, site area, plot
+  ratio, storeys, services — and print to paper sheet sizes.
+lang: en
+
+# Studio details used by the masthead and colophon.
+studio:
+  name: Architectural Design Studio
+  role: Building design and BIM
+  location: Vietnam
+  email: ""
+
+nav:
+  - title: Projects
+    url: /
+  - title: About
+    url: /about/
+
+collections:
+  projects:
+    output: true
+    permalink: /projects/:path/
+
+defaults:
+  - scope:
+      path: ""
+      type: projects
+    values:
+      layout: project
+  - scope:
+      path: ""
+    values:
+      layout: page
+
+# Units shown next to areas. Switch to "sq ft" for imperial sets.
+units:
+  area: "m²"
+
+sass:
+  style: compressed
+
+plugins:
+  - jekyll-seo-tag
+
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - README.md
+  - CONTRIBUTING.md
+  - CHANGELOG.md
+  - NOTICE.md
+  - "*.gemspec"
+  - vendor
+  - .github
