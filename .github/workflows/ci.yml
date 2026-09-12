@@ -14,7 +14,7 @@ jobs:
     name: Build and check output
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       # Fails the job on any Liquid or Sass error, which is the check that
       # matters for a theme: every layout has to compile.
